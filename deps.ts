@@ -1,7 +1,6 @@
 export {
-    TelegramBot,
-    UpdateType,
-} from "https://deno.land/x/telegram_bot_api/mod.ts";
+    Bot
+} from "https://deno.land/x/telegram@v0.0.2/mod.ts";
 
 export { config } from "https://deno.land/x/dotenv/mod.ts";
 
