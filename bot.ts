@@ -1,4 +1,4 @@
-import { Bot, config } from './deps.ts';
+import { Bot, config } from "./deps.ts";
 import { commands} from "./commands.ts";
 
 // Here we load the .env information
