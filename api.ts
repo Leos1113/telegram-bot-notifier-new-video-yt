@@ -30,7 +30,7 @@ export class Api {
     }
 
     // Here we have the last 5 videos pushed in this channel, we can change the response videos limit from 0 to 50
-    private async getLastChannels(channelId: string): object {
+    private async getLastChannels(channelId: string) {
         try {
             const lastVideoChannels = await this.youtube.search_list({ part: "id", channelId, order: "date" });
 
