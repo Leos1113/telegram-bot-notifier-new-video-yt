@@ -23,6 +23,8 @@ bot.use(async (ctx, next) => {
 
 bot.on("text", async (ctx) => {
     const text = ctx.message?.text;
+    console.log(ctx.from?.id);
+    // get the user telegram id: ctx.from?.id
 
     if (text === commands.start) {
         await ctx.reply("hello, world");
@@ -33,6 +35,13 @@ bot.on("text", async (ctx) => {
             - /addnewchannel: Starts the process for add a new youtube channel
             - /listallchannels: List all channels that we added
         `);
+    } else if (text === commands.addNewChannel) {
+        // TODO: Ask name of the channel
+        // Save with the user id
+        // Call to youtube api and get the channel id
+        // Get the list of videos and get the new one
+    } else if (text === commands.listAllChannels) {
+        // TODO: get all channels for the user
     }
 });
 
