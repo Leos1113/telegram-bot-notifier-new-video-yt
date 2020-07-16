@@ -1,5 +1,6 @@
 import { Bot, config } from "./deps.ts";
 import { commands} from "./commands.ts";
+import {Api} from "./api.ts";
 
 // Here we load the .env information
 config();
@@ -21,26 +22,30 @@ bot.use(async (ctx, next) => {
     }
 });
 
+const api = new Api();
+
+const lastVideoPosted = api.getLastVideoPosted('YouTubeDev');
+
 bot.on("text", async (ctx) => {
     const text = ctx.message?.text;
     console.log(ctx.from?.id);
     // get the user telegram id: ctx.from?.id
 
-    if (text === commands.start) {
+    if (text === commands.start.command) {
         await ctx.reply("hello, world");
-    } else if (text === commands.help) {
+    } else if (text === commands.help.command) {
         await ctx.reply(`
             Bot commands:
-            - /start: shows a Hello message
+            - /start: shows a Hello message explaining how the bot works
             - /addnewchannel: Starts the process for add a new youtube channel
             - /listallchannels: List all channels that we added
         `);
-    } else if (text === commands.addNewChannel) {
+    } else if (text === commands.addNewChannel.command) {
         // TODO: Ask name of the channel
         // Save with the user id
         // Call to youtube api and get the channel id
         // Get the list of videos and get the new one
-    } else if (text === commands.listAllChannels) {
+    } else if (text === commands.listAllChannelsAdded.command) {
         // TODO: get all channels for the user
     }
 });

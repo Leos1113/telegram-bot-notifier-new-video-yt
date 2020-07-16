@@ -1,4 +1,6 @@
-import { YouTube } from "./deps.ts";
+import {YouTube} from "./deps.ts";
+import {IVideosChannelResponse} from "./IVideosChannelResponse.ts";
+import {IGetChannelResponse} from "./IGetChannelResponse.ts";
 
 
 export class Api {
@@ -17,11 +19,11 @@ export class Api {
         this.youtube = new YouTube(this.YT_TOKEN, false);
     }
 
-    private async getChannelId(username: string): string {
+    private async getChannelId(username: string): Promise<string> {
         try {
-            const channelInfo = await this.youtube.channels_list({ part: "id", forUsername: username });
+            const channelInfo: IGetChannelResponse = await this.youtube.channels_list({ part: "id", forUsername: username });
 
-            return channelInfo?.items.id;
+            return channelInfo?.items[0].id;
         } catch (error) {
             // TODO: maybe send a message to telegram saying that we can't find any channel with this username
             console.error(error);
@@ -29,20 +31,33 @@ export class Api {
         }
     }
 
-    // Here we have the last 5 videos pushed in this channel, we can change the response videos limit from 0 to 50
-    private async getLastChannels(channelId: string) {
-        try {
-            const lastVideoChannels = await this.youtube.search_list({ part: "id", channelId, order: "date" });
+    // Here we have the last 5 videos pushed in this channel
+    private async getLastVideoChannels(channelId: string): Promise<IVideosChannelResponse> {
 
-            return lastVideoChannels?.items;
+        try {
+            return await this.youtube.search_list({part: "id", channelId, order: "date"});
         } catch (error) {
             console.error(error);
             throw new Error("Last videos not found");
         }
     }
+
+    public async getLastVideoPosted(username: string): Promise<string | undefined>{
+
+        const channelId = await this.getChannelId(username);
+
+        const lastVideos = await this.getLastVideoChannels(channelId);
+
+        try {
+            const lastVideo: string = lastVideos.items[0].id.videoId;
+
+            return lastVideo;
+        } catch (error) {
+            console.error(error);
+        }
+    }
 }
 
-// TODO: we have to get the channel id from the api, because the bot receive only the name of the channel
-// TODO: now we can check the last youtube posted and check return the response to telegram chat (make a filter function that filters the results for know which are the latesst videos
+// TODO: Create interfaces for types custom of the responses from youtube api
 // TODO: we will have to do a cronjob for execute this request every x minutes/hours
 // TODO: we can save the last video id in a database (mongodb, redis...) for check the last video updated in telegram
