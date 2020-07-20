@@ -1,18 +1,18 @@
 export const commands = {
     start: {
         command: '/start',
-        description: 'test'
+        text: 'test'
     },
     help: {
         command: '/help',
-        description: 'test help'
+        text: 'Bot commands:\n            - /start: shows a Hello message explaining how the bot works\n            - /addnewchannel {channelname}: /addnewchannel channelname, with this we add a new channel\n            - /listallchannels: List all channels that we added'
     },
     addNewChannel: {
         command: '/addnewchannel',
-        description: 'test add new channel'
+        text: ''
     },
     listAllChannelsAdded: {
         command: '/listaallchannels',
-        description: 'test lista all channels'
+        text: 'test lista all channels'
     }
 };

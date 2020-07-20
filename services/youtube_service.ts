@@ -1,9 +1,9 @@
-import {YouTube} from "./deps.ts";
-import {IVideosChannelResponse} from "./IVideosChannelResponse.ts";
-import {IGetChannelResponse} from "./IGetChannelResponse.ts";
+import {YouTube} from "../deps.ts";
+import {IVideosChannelResponse} from "../Interfaces/IVideosChannelResponse.ts";
+import {IGetChannelResponse} from "../Interfaces/IGetChannelResponse.ts";
 
 
-export class Api {
+export class Youtube_service {
 
     private readonly YT_TOKEN: string | undefined;
     private youtube: YouTube;

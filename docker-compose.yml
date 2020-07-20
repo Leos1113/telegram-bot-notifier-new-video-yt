@@ -9,3 +9,10 @@ services:
       - .env
     volumes:
       - ./:/usr/src/app:cached
+    depends_on:
+      - redis
+    links:
+      - redis:redis
+
+  redis:
+    image: "redis:alpine"
