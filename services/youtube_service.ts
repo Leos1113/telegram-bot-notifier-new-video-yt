@@ -22,7 +22,7 @@ export class Youtube_service {
     private async getChannelId(username: string): Promise<string> {
         try {
             const channelInfo: IGetChannelResponse = await this.youtube.channels_list({ part: "id", forUsername: username });
-
+console.log(channelInfo);
             return channelInfo?.items[0].id;
         } catch (error) {
             // TODO: maybe send a message to telegram saying that we can't find any channel with this username
@@ -46,8 +46,10 @@ export class Youtube_service {
 
         const channelId = await this.getChannelId(username);
 
-        const lastVideos = await this.getLastVideoChannels(channelId);
+        console.log(channelId);
 
+        const lastVideos = await this.getLastVideoChannels(channelId);
+        console.log(lastVideos.items);
         try {
             const lastVideo: string = lastVideos.items[0].id.videoId;
 
@@ -57,7 +59,3 @@ export class Youtube_service {
         }
     }
 }
-
-// TODO: Create interfaces for types custom of the responses from youtube api
-// TODO: we will have to do a cronjob for execute this request every x minutes/hours
-// TODO: we can save the last video id in a database (mongodb, redis...) for check the last video updated in telegram

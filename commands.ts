@@ -12,7 +12,7 @@ export const commands = {
         text: ''
     },
     listAllChannelsAdded: {
-        command: '/listaallchannels',
+        command: '/listallchannels',
         text: 'test lista all channels'
     }
 };
