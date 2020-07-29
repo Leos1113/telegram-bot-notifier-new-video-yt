@@ -25,7 +25,6 @@ export class Youtube_service {
             return channelInfo?.items[0].id;
         } catch (error) {
             console.error(error);
-            throw new Error("Channel info not found");
         }
     }
 
@@ -36,7 +35,6 @@ export class Youtube_service {
             return await this.youtube.search_list({part: "id", channelId, order: "date"});
         } catch (error) {
             console.error(error);
-            throw new Error("Last videos not found");
         }
     }
 

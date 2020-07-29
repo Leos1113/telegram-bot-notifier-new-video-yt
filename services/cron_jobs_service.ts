@@ -15,7 +15,7 @@ export class Cron_jobs_service {
         this.cron = new Cron();
     }
 
-    async everyHour(bot: Bot) {
+    async start(bot: Bot) {
         await this.redisService.connect();
         this.cron.add("* */2 * * *", async() => {
             const keys = await this.redisService.getAllKeys();

@@ -25,8 +25,10 @@ bot.use(async (ctx, next) => {
     }
 });
 
+
+// Start the cron service
 const cronService = new Cron_jobs_service();
-await cronService.everyHour(bot);
+await cronService.start(bot);
 
 bot.on("text", async ctx => {
     const text: string | undefined = ctx.message?.text;
