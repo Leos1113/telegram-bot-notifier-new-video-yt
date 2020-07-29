@@ -16,6 +16,16 @@ Enter to bot directory:
 
 ``cd telegram-bot-notifier-new-video-yt``
 
+Copy the .env.example:
+
+```cp .env.example .env```
+
+And replace the examples with your keys
+
 And finally:
 
 ```docker-compose up```
+
+### Warning
+
+The youtube api has a limit of requests for free, the limit it's to short :(
