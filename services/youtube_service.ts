@@ -11,7 +11,6 @@ export class Youtube_service {
     constructor() {
         this.YT_TOKEN = Deno.env.get("YOUTUBE_API_KEY");
 
-        //TODO: throw the exception
         if (!this.YT_TOKEN) {
             Deno.exit(0);
         }
@@ -22,10 +21,9 @@ export class Youtube_service {
     private async getChannelId(username: string): Promise<string> {
         try {
             const channelInfo: IGetChannelResponse = await this.youtube.channels_list({ part: "id", forUsername: username });
-console.log(channelInfo);
+
             return channelInfo?.items[0].id;
         } catch (error) {
-            // TODO: maybe send a message to telegram saying that we can't find any channel with this username
             console.error(error);
             throw new Error("Channel info not found");
         }
@@ -42,14 +40,24 @@ console.log(channelInfo);
         }
     }
 
-    public async getLastVideoPosted(username: string): Promise<string | undefined>{
+    public async getLastVideoPostedByUsername(username: string): Promise<string | undefined>{
 
         const channelId = await this.getChannelId(username);
 
-        console.log(channelId);
-
         const lastVideos = await this.getLastVideoChannels(channelId);
-        console.log(lastVideos.items);
+
+        try {
+            const lastVideo: string = lastVideos.items[0].id.videoId;
+
+            return lastVideo;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    public async getLastVideoPostedByChannelId(channelId: string): Promise<string | undefined> {
+        const lastVideos =  await this.getLastVideoChannels(channelId);
+
         try {
             const lastVideo: string = lastVideos.items[0].id.videoId;
 

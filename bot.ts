@@ -1,10 +1,9 @@
-import {Bot, config, RedisConnect} from "./deps.ts";
-import { commands} from "./commands.ts";
+import {Bot, config} from "./deps.ts";
+import {commands} from "./commands.ts";
 import {Youtube_service} from "./services/youtube_service.ts";
 import {Redis_service} from "./services/redis_service.ts";
 import {Cron_jobs_service} from "./services/cron_jobs_service.ts";
-
-//TODO: we need
+import {Types} from "./Interfaces/IDataChannelSaved.ts";
 
 // Here we load the .env information
 config();
@@ -39,13 +38,17 @@ bot.on("text", async ctx => {
         await ctx.reply("hello, world");
     } else if (textSplit[0] === commands.help.command) {
         await ctx.reply(commands.help.text);
-    } else if (textSplit[0] === commands.addNewChannel.command) {
+    } else if (textSplit[0] === commands.addNewChannelByUsername.command || textSplit[0] === commands.addNewChannelByChannelId.command) {
 
         let saved: boolean = false;
 
         const youtubeService = new Youtube_service();
 
-        const lastVideo: string | undefined = await youtubeService.getLastVideoPosted(textSplit[1]);
+        const type: Types = textSplit[0] === commands.addNewChannelByUsername.command ? Types.Username : Types.ChannelId;
+
+        const lastVideo: string | undefined = (type === Types.Username) ?
+            await youtubeService.getLastVideoPostedByUsername(textSplit[1]) :
+            await youtubeService.getLastVideoPostedByChannelId(textSplit[1]);
 
         if (!lastVideo) await ctx.reply(`Can not find this channel, please check the name of the channel`);
 
@@ -58,16 +61,19 @@ bot.on("text", async ctx => {
         let data = (userData) ? JSON.parse(userData): null;
 
         if (userData) {
+            let notExist = true;
 
             for (const d of data) {
                 if (d.channel === textSplit[1]) {
                     await ctx.reply(`${d.channel} is already added`);
                     return;
                 }
+
+                if (d.channel === textSplit[1]) notExist = false;
             }
 
-            if (userId && lastVideo && data.channel !== textSplit[1]) {
-                data.push({channel: textSplit[1], videoId: lastVideo});
+            if (userId && lastVideo && notExist) {
+                data.push({channel: textSplit[1], videoId: lastVideo, type});
                 saved = (await redisService.saveVideo(userId!, data)) ?? false;
             }
 
@@ -77,7 +83,7 @@ bot.on("text", async ctx => {
             }
         } else {
 
-            if (userId && lastVideo) saved = await redisService.saveVideo(userId!, [{channel: textSplit[1], videoId: lastVideo!}]) ?? false;
+            if (userId && lastVideo) saved = await redisService.saveVideo(userId!, [{channel: textSplit[1], videoId: lastVideo!, type}]) ?? false;
 
             if (saved) {
                 await ctx.reply(`Added ${textSplit[1]}!`);

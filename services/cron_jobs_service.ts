@@ -1,6 +1,7 @@
 import {Bot, Cron} from "../deps.ts";
 import {Youtube_service} from "./youtube_service.ts";
 import {Redis_service} from "./redis_service.ts";
+import {Types} from "../Interfaces/IDataChannelSaved.ts";
 
 export class Cron_jobs_service {
 
@@ -27,11 +28,14 @@ export class Cron_jobs_service {
                 let lastVideo: string | undefined;
 
                 for(const d of data) {
-                   lastVideo  = await this.youtubeService.getLastVideoPosted(d.channel);
+                   lastVideo  = (d.type === Types.Username) ? await this.youtubeService.getLastVideoPostedByUsername(d.channel)
+                        : await this.youtubeService.getLastVideoPostedByChannelId(d.channel);
 
                     if (lastVideo !== d.videoId) {
                         d.videoId = lastVideo;
+
                         await this.redisService.saveVideo(key, data);
+
                         bot.telegram.sendMessage({chat_id: key, text: `https://www.youtube.com/watch?v=${lastVideo}`});
                     }
                 }

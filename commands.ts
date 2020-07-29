@@ -1,18 +1,19 @@
 export const commands = {
     start: {
         command: '/start',
-        text: 'test'
+        text: 'Welcome to youtube new video notificator :)'
     },
     help: {
         command: '/help',
-        text: 'Bot commands:\n            - /start: shows a Hello message explaining how the bot works\n            - /addnewchannel {channelname}: /addnewchannel channelname, with this we add a new channel\n            - /listallchannels: List all channels that we added'
+        text: 'Bot commands:\n            - /start: shows a Hello message explaining how the bot works\n            - /addnewchannelbyuser {username}: /addnewchannelbyuser username, with this we add a new channel\n     - /addnewchannelbychannelid {channelId}: /addnewchannelbychannelid channelId, with this we add a new channel\n       - /listallchannels: List all channels that we added'
     },
-    addNewChannel: {
-        command: '/addnewchannel',
-        text: ''
+    addNewChannelByUsername: {
+        command: '/addnewchannelbyusername',
+    },
+    addNewChannelByChannelId: {
+        command: '/addnewchannelbychannelid',
     },
     listAllChannelsAdded: {
         command: '/listallchannels',
-        text: 'test lista all channels'
     }
 };
